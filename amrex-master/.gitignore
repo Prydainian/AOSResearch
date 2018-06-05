@@ -1,0 +1,25 @@
+nohup.out
+*.[oa]
+*.ex
+*~
+tmp_build_dir/
+d/
+f/
+o/
+t/
+TAGS
+
+# latex
+*.aux
+*.log
+*.bbl
+*.toc
+*.dvi
+*-eps-converted-to.pdf
+
+# python
+*.pyc
+
+.DS_Store
+Docs/AMReXUsersGuide/Visualization/*.pdf
+Docs/sphinx/build

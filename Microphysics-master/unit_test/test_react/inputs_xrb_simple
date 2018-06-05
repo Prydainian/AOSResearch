@@ -1,0 +1,16 @@
+&PROBIN
+  test_set = "gr0_3d.small"
+
+  dens_min   = 1.d4
+  dens_max   = 3.d6
+  temp_min   = 1.d8
+  temp_max   = 1.d9
+
+  tmax = 0.002d0
+
+  xin_file   = "xin.xrb_simple"
+  run_prefix = "react_xrb_simple_"
+  
+  !centered_diff_jac = T
+
+/

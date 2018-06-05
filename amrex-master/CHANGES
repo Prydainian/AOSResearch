@@ -1,0 +1,112 @@
+# 18.04
+
+  -- New BoxList constructors making a given number of Boxes from a
+     single Box.
+
+  -- Optimization of particle redistribution
+
+  -- MLMG nodal linear solver: add solvability fix
+
+  -- Modification to amrex::Initialize and Finalize to make it
+     suitable as a library in an application that does not use AMReX
+     as a framework.
+
+# 18.03
+
+  -- STL support for EB
+
+# 18.02
+
+  -- Fortran interface: added new functions amrex_multifab_build_alias
+     and amrex_imultifab_build_alias.
+
+  -- Documentation in reST/Sphinx.  See Docs/Readme.sphinx for more
+     details.
+
+  -- Src/LinearSolvers/MLMG now supports nodal based data.
+
+  -- Fortran module AMReX_fillpatch_module takes a user provided
+     callback function for filling physical boundary conditions.  That
+     function used to use 0-based index for component (i.e., the last
+     index).  For consistence with 1-based index for component in
+     other Fortran modules, this has been changed to 1-based index for
+     component.
+
+# 18.01
+
+  -- New linear solver MLMG at Src/LinearSolvers/MLMG/.  Currently it
+     supports cell-centered single level and multi-level composite
+     solve.  Fortran interface is also available at
+     Src/F_Interfaces/LinearSolvers/.  See Tutorials/LinearSolvers for
+     tutorials.
+
+# 17.12
+
+  -- Ported more features (including dynamic scheduling and explicit
+     tile size) of MFIter from C++ to Fortran.
+
+  -- Added procedures to Fortran amrex_multifab_module to add,
+     subtract, multiply, divide, saxpy and lincomb (linear
+     combination).  Note that we call it saxpy, but it doesn't mean
+     single precision.
+
+  -- The `configure; make; make install` build approach enables linear
+     solvers by default now.
+
+  -- MultiFab and iMultiFab now support move assignment operator.
+     This allows for swapping two MultiFabs without deep copying.  For
+     instance, std::swap(mf1, mf2);
+
+  -- Tutorials/Amr/Advection_AmrCore changes from using
+     `Vector<unique_ptr<MultiFab>>` to `Vector<MultiFab>`.
+
+# 17.11
+
+  -- AMREX_ASSERT_WITH_MESSAGE and AMREX_ALWAYS_ASSERT_WITH_MESSAGE
+     are new macros for assertion when it fails additional message
+     will be printed.   For example:
+
+         AMREX_ASSERT_WITH_MESSAGE(x > y, "reason why x > y must be true");
+
+  -- amrex::Array is deprecated and replaced by amrex::Vector.
+     Currently Array is an alias to Vector.  So this should not break
+     any codes.  In the future, we will remove Array completely.
+     Therefore it is recommended that application codes should start
+     replacing Array with Vector.  There is a script,
+     amrex/Tools/Migration/amrex_array_to_vector.sh, to help.  But use
+     it with caution.   If it is completely gibberish to you, you
+     probably shouldn't use the script. 
+
+  -- functions for printing to a file in a parallel and thread-safe manner
+     have been added. For example:
+
+        amrex::AllPrintToFile("output") << "Hello from rank " << rank << 
+                                           " and thread " << thread << "\n";
+
+     will print out the requested information to separate files for each 
+     rank and thread.
+
+# 17.10
+
+  -- Added a load balance approach to Amr/AmrLevel.  The runtime
+     parameters for this is amr.loadbalance_with_workestimates and
+     amr.loadbalance_level0_int.  The latter is for single level
+     (i.e., amr.max_level=0) only.  For multi-level runs, load balance
+     is done during regrid and thus the load balance interval is
+     controlled by amr.regrid_int.  To use this approach, AmrLevel
+     derivative must has a StateData for work estimates and its index
+     is returned by virtual function int WorkEstType().
+
+  -- MFIter now supports dynamic scheduling of OpenMP threads.  For
+     example,
+ 
+       for (MFIter mfi(mf, MFItInfo().SetDynamic(true).EnableTiling(tile_size);
+            mfi.isValid(); ++mfi)
+       { ... }
+
+  -- Added EBFluxRegister to Src/EB for refluxing and
+     re-redistribution in EB.
+
+  -- amrex.signal_handling = 1 is a new runtime parameter that can be
+     used to control whether AMReX should handle signals like SIGSEGV
+     etc. 
